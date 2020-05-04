@@ -132,9 +132,31 @@ void show_histogram_svg(const vector<size_t>& bins)
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
 
     double top = 0;
+    size_t max_count=bins[0];
+
     for (size_t bin : bins)
     {
-        const double bin_width = BLOCK_WIDTH * bin;
+        if (bin>max_count)
+        {
+            max_count=bin;
+        }
+    }
+        const size_t SCREEN_WIDTH=100;
+        const size_t MAX_ASTERISK=SCREEN_WIDTH -50 -20;
+
+        for (size_t bin: bins)
+        {
+            const bool scalling_needed =max_count<MAX_ASTERISK;
+            size_t bin_koeff=bin;
+
+            if (scalling_needed)
+            {
+                const double koeff = (double)MAX_ASTERISK / max_count;
+                bin_koeff= (size_t)(bin * koeff);
+            }
+
+            const double bin_width = BLOCK_WIDTH * bin_koeff;
+
         svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
         svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "red", "#ffeeee");
         top += BIN_HEIGHT;
