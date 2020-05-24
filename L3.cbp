@@ -31,7 +31,12 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add directory="curl/include" />
 		</Compiler>
+		<Linker>
+			<Add library="libcurl.dll" />
+			<Add directory="curl/lib" />
+		</Linker>
 		<Unit filename=".gitignore" />
 		<Unit filename="histogram.cpp" />
 		<Unit filename="histogram.h" />
