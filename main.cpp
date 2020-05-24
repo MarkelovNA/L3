@@ -5,12 +5,6 @@
 
 using namespace std;
 
-struct Input
-{
-    vector <double> numbers;
-    size_t bin_count;
-};
-
 Input read_input(istream& in)
 {
     Input data;
@@ -32,7 +26,7 @@ int main()
 {
     const auto input = read_input(cin);
 
-    const auto bins=make_histogram(input.numbers,input.bin_count);
+    const auto bins=make_histogram(input);
 
     double bin_height;
     show_histogram_svg(bins, bin_height);
