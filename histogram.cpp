@@ -4,14 +4,23 @@ Input read_input(istream& in, bool prompt)
 {
     Input data;
 
-    if (prompt) {cerr << "Enter number count: ";}
+    if (prompt)
+    {
+        cerr << "Enter number count: ";
+    }
     size_t number_count;
     in >> number_count;
 
-    if (prompt) {cerr << "Enter numbers: ";}
+    if (prompt)
+    {
+        cerr << "Enter numbers: ";
+    }
     data.numbers = input_numbers(in, number_count);
 
-    if (prompt) {cerr << "Enter column count: ";}
+    if (prompt)
+    {
+        cerr << "Enter column count: ";
+    }
     in >> data.bin_count;
 
     return data;
@@ -25,7 +34,7 @@ size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx)
     return data_size;
 }
 
-Input download(const string& address)
+Input download(const string& address, bool UseVerbose)
 {
     stringstream buffer;
 
@@ -34,6 +43,10 @@ Input download(const string& address)
     if(curl)
     {
         CURLcode res;
+        if (UseVerbose)
+        {
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        }
         curl_easy_setopt(curl, CURLOPT_URL, address.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
@@ -136,4 +149,34 @@ void show_histogram_text(vector<size_t> bins)
         cout << '\n';
     }
     return;
+}
+
+Configurations input_config(int argc, char** argv)
+{
+    Configurations config;
+
+    config.UseVerbose=false;
+    config.UseHint=false;
+    config.UrlPage=0;
+
+    for (int i=1; i<argc; i++)
+    {
+        if (argv[i][0]=='-')
+        {
+            if (strcmp(argv[i], "-verbose") == 0)
+            {
+                config.UseVerbose=true;
+            }
+            else
+            {
+                config.UseHint=true;
+            }
+        }
+        else
+        {
+            config.UrlPage=argv[i];
+        }
+    }
+
+    return config;
 }

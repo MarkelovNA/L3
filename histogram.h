@@ -13,10 +13,18 @@ struct Input
     size_t bin_count;
 };
 
+struct Configurations
+{
+    bool UseVerbose;
+    bool UseHint;
+    char* UrlPage;
+};
+
 Input read_input(istream& in, bool prompt);
 size_t write_data(void* items, size_t item_size, size_t item_count, void* ctx);
-Input download(const string& address);
+Input download(const string& address, bool UseVerbose);
 vector<double> input_numbers(istream& in, size_t count);
 void find_minmax(vector<double> numbers, double& min, double& max);
 vector<size_t> make_histogram(const Input input);
 void show_histogram_text(vector<size_t> bins);
+Configurations input_config(int argc, char** argv);
