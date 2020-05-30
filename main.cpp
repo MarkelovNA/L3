@@ -14,11 +14,14 @@ int main()
     DWORD version = info & mask;
     DWORD platform = info >> 16;
     DWORD mask_major = 0x0000ff;
-    DWORD version_major = version & mask_major;
-    DWORD version_minor = version >> 8;
-    printf("Windows version is %u.\n", version);
-    printf("Version Major is %u.\n", version_major);
-    printf("Version Minor is %u.\n", version_minor);
+
+    if ((info & 0x80000000) == 0)
+    {
+        DWORD version_major = version & mask_major;
+        DWORD version_minor = version >> 8;
+        DWORD build = platform;
+        printf("Windows v%u.%u (build %u)", version_major, version_minor, build);
+    }
     return 0;
 
     size_t number_count;
