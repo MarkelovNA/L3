@@ -3,6 +3,8 @@
 #include "histogram.h"
 #include "svg.h"
 #include <curl/curl.h>
+#include <cstdio>
+#include <windows.h>
 
 using namespace std;
 

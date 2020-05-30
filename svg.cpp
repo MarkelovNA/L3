@@ -29,12 +29,12 @@ void svg_rect(double x, double y, double width, double height, string stroke, st
 void show_histogram_svg(const vector<size_t>& bins, double& bin_height)
 {
 
-    const auto IMAGE_WIDTH = 400;
+    const auto IMAGE_WIDTH = 500;
     const auto IMAGE_HEIGHT = 300;
     const auto TEXT_TOP = 20;
     const auto TEXT_HEIGHT = 30;
     const auto BIN_WIDTH = 30;
-    const auto TEXT_BASELINE = 15;
+    const auto TEXT_BASELINE = BIN_WIDTH / 2;
 
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
 
@@ -55,10 +55,39 @@ void show_histogram_svg(const vector<size_t>& bins, double& bin_height)
         const double bin_koeff = (double)(IMAGE_HEIGHT - TEXT_HEIGHT) / max_count;
         bin_height = bin * bin_koeff;
 
-        svg_text(left + TEXT_BASELINE, TEXT_TOP, to_string(bin));
-        svg_rect(left, TEXT_HEIGHT, BIN_WIDTH, bin_height, "red", "#ffeeee");
+        svg_text(left + TEXT_BASELINE, TEXT_TOP+TEXT_TOP, to_string(bin));
+        svg_rect(left, TEXT_HEIGHT + TEXT_TOP, BIN_WIDTH, bin_height, "red", "#ffeeee");
         left += BIN_WIDTH;
     }
-
+    svg_text(0, TEXT_TOP, make_info_text());
     svg_end();
+}
+
+string make_info_text()
+{
+    stringstream buffer;
+
+    DWORD info = GetVersion();
+    DWORD mask = 0x0000ffff;
+    DWORD version = info & mask;
+    DWORD platform = info >> 16;
+    DWORD mask_major = 0x0000ff;
+
+    if ((info & 0x80000000) == 0)
+    {
+        DWORD version_major = version & mask_major;
+        DWORD version_minor = version >> 8;
+        DWORD build = platform;
+
+        buffer << "Windows v" << version_major << "." << version_minor << " (build " << build << ") | ";
+    }
+
+        char system_dir[MAX_PATH];
+        char computer_name[MAX_COMPUTERNAME_LENGTH + 1];
+        DWORD size = MAX_COMPUTERNAME_LENGTH+1;
+        GetComputerNameA(computer_name, &size);
+
+        buffer << "Computer name: " << computer_name;
+
+    return buffer.str();
 }
