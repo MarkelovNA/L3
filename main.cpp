@@ -9,16 +9,10 @@ using namespace std;
 
 int main()
 {
-    /*
-    const char* name = "Commander Shepard";
-    int year = 2154;
-    printf("%s was born in %d.\n", name, year);
-    // Commander Shepard was born in 2154.
-    printf("n = %08x\n", 0x1234567); // 01234567
-    return 0;
-    */
-    printf("Windows (decimal) version is %u.\n", GetVersion());
-    printf("Windows (16x) version is %x.\n", GetVersion());
+    DWORD info = GetVersion();
+    DWORD mask = 0b00000000'00000000'11111111'11111111;
+    DWORD version = info & mask;
+    printf("Windows version is %u.\n", version);
     return 0;
 
     size_t number_count;
